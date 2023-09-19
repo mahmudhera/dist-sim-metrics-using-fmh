@@ -47,6 +47,7 @@ int main() {
             // compute true
             double true_cosine = 0.0;
             for (int i = 0; i < NUM_KMERS; i++) true_cosine += vector_a[i]*vector_b[i];
+            if (true_cosine < 0) true_cosine *= -1;
             true_cosine /= (sqrt(len_set_a) * sqrt(len_set_b));
 
             // take sketch, compute sketched cosine
@@ -58,6 +59,7 @@ int main() {
                 len_sketch_of_a += vector_a[i]*random_indices[i];
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
+            if (sketched_cosine < 0) sketched_cosine *= -1;
             sketched_cosine /= (sqrt(len_sketch_of_a) * sqrt(len_sketch_of_b));
             cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_cosine << ' ' << sketched_cosine << endl;
             // print
