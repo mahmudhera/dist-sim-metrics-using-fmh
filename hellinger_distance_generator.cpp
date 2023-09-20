@@ -54,7 +54,7 @@ int main() {
             int len_sketch_of_a = 0;
             int len_sketch_of_b = 0;
             for (int i = 0; i < NUM_KMERS; i++) {
-                sketched_cosine += vector_a[i]*vector_b[i]*random_indices[i];
+                sketched_hellinger += vector_a[i]*vector_b[i]*random_indices[i];
                 len_sketch_of_a += vector_a[i]*random_indices[i];
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
