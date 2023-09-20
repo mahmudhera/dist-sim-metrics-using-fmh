@@ -48,7 +48,8 @@ int main() {
             double true_cosine = 0.0;
             for (int i = 0; i < NUM_KMERS; i++) true_cosine += vector_a[i]*vector_b[i];
             true_cosine /= (sqrt(len_set_a) * sqrt(len_set_b));
-            
+            double true_chord = sqrt(2.0 - 2.0 * true_cosine);
+
             // take sketch, compute sketched cosine
             double sketched_cosine = 0.0;
             int len_sketch_of_a = 0;
@@ -59,8 +60,9 @@ int main() {
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
             sketched_cosine /= (sqrt(len_sketch_of_a) * sqrt(len_sketch_of_b));
+            sketched_chord = sqrt(2.0 - 2.0 * sketched_cosine);
 
-            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_cosine << ' ' << sketched_cosine << endl;
+            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_chord << ' ' << sketched_chord << endl;
             // print
         }
     }
