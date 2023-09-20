@@ -60,7 +60,7 @@ int main() {
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
             sketched_cosine /= (sqrt(len_sketch_of_a) * sqrt(len_sketch_of_b));
-            sketched_chord = sqrt(2.0 - 2.0 * sketched_cosine);
+            double sketched_chord = sqrt(2.0 - 2.0 * sketched_cosine);
 
             cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_chord << ' ' << sketched_chord << endl;
             // print
