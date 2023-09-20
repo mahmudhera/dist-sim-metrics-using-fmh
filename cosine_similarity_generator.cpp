@@ -13,7 +13,7 @@ int main() {
     int min_len_set_b = 10000;
     int max_len_set_b = 90000;
     int seed = 0;
-    double scale_factors[] = {0.0001, 0.001, 0.01, 0.1};
+    double scale_factors[] = {0.00001, 0.0001, 0.001, 0.01, 0.1};
     srand(seed);
 
     default_random_engine generator;
