@@ -48,6 +48,7 @@ int main() {
             double true_hellinger = 0.0;
             for (int i = 0; i < NUM_KMERS; i++) true_hellinger += vector_a[i]*vector_b[i];
             true_hellinger /= (sqrt(len_set_a) * sqrt(len_set_b));
+            true_hellinger = sqrt(1.0 - true_hellinger);
 
             // take sketch, compute sketched cosine
             double sketched_hellinger = 0.0;
@@ -59,6 +60,7 @@ int main() {
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
             sketched_hellinger /= (sqrt(len_sketch_of_a) * sqrt(len_sketch_of_b));
+            sketched_hellinger = sqrt(1.0 - sketched_hellinger);
 
             cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_hellinger << ' ' << sketched_hellinger << endl;
             // print
