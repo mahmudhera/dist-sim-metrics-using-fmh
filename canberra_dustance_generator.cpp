@@ -45,22 +45,27 @@ int main() {
             random_shuffle(std::begin(vector_b), std::end(vector_b));
 
             // compute true
-            double true_bray_curtis = 0.0;
-            for (int i = 0; i < NUM_KMERS; i++) true_bray_curtis += min(vector_a[i], vector_b[i]);
-            true_bray_curtis = 1.0 - 2.0 * true_bray_curtis/(len_set_a + len_set_b);
+            double true_canberra = 0.0;
+            int num_distinct_kmers = 0;
+            for (int i = 0; i < NUM_KMERS; i++) {
+                if (vector_a[i] + vector_b[i] == 0) continue;
+                true_canberra += 1.0 * abs((double)vector_a[i] - (double)vector_b[i])/((double)vector_a[i] + (double)vector_b[i]);
+                if (vector_a[i] > 0 || vector_b[i] > 0) num_distinct_kmers++;
+            }
+            true_canberra /= (1.0 * num_distinct_kmers);
 
             // take sketch, compute sketched cosine
-            double sketched_bray_curtis = 0.0;
-            int len_sketch_of_a = 0;
-            int len_sketch_of_b = 0;
+            double sketched_canberra = 0.0;
+            int num_distinct_kmers_in_sketches = 0;
             for (int i = 0; i < NUM_KMERS; i++) {
-                sketched_bray_curtis += min(vector_a[i], vector_b[i])*random_indices[i];
-                len_sketch_of_a += vector_a[i]*random_indices[i];
-                len_sketch_of_b += vector_b[i]*random_indices[i];
+                if (random_indices[i] == 0) continue;
+                if (vector_a[i] + vector_b[i] == 0) continue;
+                sketched_canberra += 1.0 * abs((double)vector_a[i] - (double)vector_b[i])/((double)vector_a[i] + (double)vector_b[i]);
+                if (vector_a[i] > 0 || vector_b[i] > 0) num_distinct_kmers_in_sketches++;
             }
-            sketched_bray_curtis = 1.0 - 2.0 * sketched_bray_curtis / (len_sketch_of_a + len_sketch_of_b);
+            sketched_canberra /= (1.0 * num_distinct_kmers_in_sketches);
 
-            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_bray_curtis << ' ' << sketched_bray_curtis << endl;
+            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_canberra << ' ' << sketched_canberra << endl;
         }
     }
 

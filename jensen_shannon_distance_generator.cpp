@@ -45,22 +45,31 @@ int main() {
             random_shuffle(std::begin(vector_b), std::end(vector_b));
 
             // compute true
-            double true_bray_curtis = 0.0;
-            for (int i = 0; i < NUM_KMERS; i++) true_bray_curtis += min(vector_a[i], vector_b[i]);
-            true_bray_curtis = 1.0 - 2.0 * true_bray_curtis/(len_set_a + len_set_b);
+            double true_js = 0.0;
+            for (int i = 0; i < NUM_KMERS; i++) {
+                double divider = vector_a[i]*len_set_b + vector_b[i]*len_set_a;
+                if (divider == 0) continue;
+                if (vector_a[i] != 0) true_js += 0.5 * (1.0*vector_a[i]/len_set_a) * log(2.0*vector_a[i]*len_set_b/divider);
+                if (vector_b[i] != 0) true_js += 0.5 * (1.0*vector_b[i]/len_set_b) * log(2.0*vector_b[i]*len_set_a/divider);
+            }
 
             // take sketch, compute sketched cosine
-            double sketched_bray_curtis = 0.0;
+            double sketched_js = 0.0;
             int len_sketch_of_a = 0;
             int len_sketch_of_b = 0;
             for (int i = 0; i < NUM_KMERS; i++) {
-                sketched_bray_curtis += min(vector_a[i], vector_b[i])*random_indices[i];
                 len_sketch_of_a += vector_a[i]*random_indices[i];
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
-            sketched_bray_curtis = 1.0 - 2.0 * sketched_bray_curtis / (len_sketch_of_a + len_sketch_of_b);
+            for (int i = 0; i < NUM_KMERS; i++) {
+                if (random_indices[i] == 0) continue;
+                double divider = vector_a[i]*len_sketch_of_b + vector_b[i]*len_sketch_of_a;
+                if (divider == 0) continue;
+                if (vector_a[i] != 0) sketched_js += 0.5 * (1.0*vector_a[i]/len_sketch_of_a) * log(2.0*vector_a[i]*len_sketch_of_b/divider);
+                if (vector_b[i] != 0) sketched_js += 0.5 * (1.0*vector_b[i]/len_sketch_of_b) * log(2.0*vector_b[i]*len_sketch_of_a/divider);
+            }
 
-            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_bray_curtis << ' ' << sketched_bray_curtis << endl;
+            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_js << ' ' << sketched_js << endl;
         }
     }
 

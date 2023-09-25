@@ -13,14 +13,13 @@ int main() {
     int min_len_set_b = 10000;
     int max_len_set_b = 90000;
     int seed = 0;
-    double scale_factors[] = {0.0001, 0.001, 0.01, 0.1};
+    double scale_factors[] = {0.0001, 0.001, 0.01, 0.1, 0.95, 1.0};
     srand(seed);
 
     default_random_engine generator;
     random_device rd;
     mt19937 rng(rd());
     uniform_int_distribution<int> uni(min_len_set_b, max_len_set_b);
-
     for (double scale_factor : scale_factors) {
         // select sketch size
         bool random_indices[NUM_KMERS] = {0};
@@ -45,22 +44,22 @@ int main() {
             random_shuffle(std::begin(vector_b), std::end(vector_b));
 
             // compute true
-            double true_bray_curtis = 0.0;
-            for (int i = 0; i < NUM_KMERS; i++) true_bray_curtis += min(vector_a[i], vector_b[i]);
-            true_bray_curtis = 1.0 - 2.0 * true_bray_curtis/(len_set_a + len_set_b);
+            double true_kulczynski = 0.0;
+            for (int i = 0; i < NUM_KMERS; i++) true_kulczynski += min(vector_a[i], vector_b[i]);
+            true_kulczynski = 1.0 - 0.5 * (0.0 + len_set_a + len_set_b) * true_kulczynski/(1.0*len_set_a*len_set_b);
 
             // take sketch, compute sketched cosine
-            double sketched_bray_curtis = 0.0;
+            double sketched_kulczynski = 0.0;
             int len_sketch_of_a = 0;
             int len_sketch_of_b = 0;
             for (int i = 0; i < NUM_KMERS; i++) {
-                sketched_bray_curtis += min(vector_a[i], vector_b[i])*random_indices[i];
+                sketched_kulczynski += min(vector_a[i], vector_b[i])*random_indices[i];
                 len_sketch_of_a += vector_a[i]*random_indices[i];
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
-            sketched_bray_curtis = 1.0 - 2.0 * sketched_bray_curtis / (len_sketch_of_a + len_sketch_of_b);
+            sketched_kulczynski = 1.0 - 0.5 * (0.0 + len_sketch_of_a + len_sketch_of_b) * sketched_kulczynski / (1.0*len_sketch_of_a*len_sketch_of_b);
 
-            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_bray_curtis << ' ' << sketched_bray_curtis << endl;
+            cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_kulczynski << ' ' << sketched_kulczynski << endl;
         }
     }
 

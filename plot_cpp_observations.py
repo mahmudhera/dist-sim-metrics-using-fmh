@@ -7,9 +7,9 @@ plt.rcParams["font.family"] = "tahoma"
 plt.rcParams['font.size'] = 11
 
 scale_factors = [0.0001, 0.001, 0.01, 0.1];
-#scale_factors = [0.01, 0.1, 0.5, 0.95]
-ylim = 100
-clip_y = True
+#scale_factors = [0.01, 0.1, 0.95, 1.0]
+ylim = 50
+clip_y = False
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
