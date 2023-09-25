@@ -46,7 +46,7 @@ int main() {
 
             // compute true
             double true_whittaker = 0.0;
-            for (int i = 0; i < NUM_KMERS; i++) true_whittaker += vector_a[i]^vector_b[i];
+            for (int i = 0; i < NUM_KMERS; i++) true_whittaker += abs( vector_a[i]*len_set_b - vector_b[i]*len_set_a );
             true_whittaker /= (2.0 * len_set_a * len_set_b);
 
             // take sketch, compute sketched cosine
@@ -54,14 +54,13 @@ int main() {
             int len_sketch_of_a = 0;
             int len_sketch_of_b = 0;
             for (int i = 0; i < NUM_KMERS; i++) {
-                sketched_whittaker += (vector_a[i]^vector_b[i])*random_indices[i];
                 len_sketch_of_a += vector_a[i]*random_indices[i];
                 len_sketch_of_b += vector_b[i]*random_indices[i];
             }
+            for (int i = 0; i < NUM_KMERS; i++) sketched_whittaker += random_indices[i]*abs( vector_a[i]*len_sketch_of_b - vector_b[i]*len_sketch_of_a );
             sketched_whittaker /= (2.0 * len_sketch_of_a * len_sketch_of_b);
 
             cout << scale_factor << ' ' << len_set_a << ' ' << len_set_b << ' ' << true_whittaker << ' ' << sketched_whittaker << endl;
-            // print
         }
     }
 
