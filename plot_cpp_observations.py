@@ -6,8 +6,10 @@ import sys
 plt.rcParams["font.family"] = "tahoma"
 plt.rcParams['font.size'] = 11
 
-#scale_factors = [0.0001, 0.001, 0.01, 0.1];
-scale_factors = [0.01, 0.1, 0.5, 0.95]
+scale_factors = [0.0001, 0.001, 0.01, 0.1];
+#scale_factors = [0.01, 0.1, 0.5, 0.95]
+ylim = 100
+clip_y = True
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -22,7 +24,8 @@ if __name__ == "__main__":
         axs[coord[0],coord[1]].scatter(df2['size_v'], 100*(df2['cos_org']-df2['cos_fmh'])/df2['cos_org'], s=1, color='#0077b6')
         axs[coord[0],coord[1]].plot( [a, b], [0, 0], color='#03045e')
         axs[coord[0],coord[1]].set_title(f'FMH Scale Factor {s}', fontsize=11)
-        #axs[coord[0],coord[1]].set_ylim(-100,100)
+        if clip_y:
+            axs[coord[0],coord[1]].set_ylim(-ylim,ylim)
 
     for ax in axs.flat:
         ax.set(xlabel='Number of kmers in variable set', ylabel='% diff from true value')
@@ -30,5 +33,5 @@ if __name__ == "__main__":
     fig.suptitle('Estimated vals for various scale factors', fontsize=11)
     plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
-    plt.savefig('diff_of_metrics.pdf')
+    #plt.savefig('diff_of_metrics.pdf')
     plt.show()
