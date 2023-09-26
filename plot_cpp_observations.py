@@ -12,9 +12,15 @@ ylim = 50
 clip_y = False
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print('File not given')
+    print('Usage: python script_name.py obs_filename pdf_filename ylim clip_y')
+    if len(sys.argv) < 5:
+        print('File(s) not given')
         exit(-1)
+
+    if sys.argv[4]=='true' or sys.argv[4]=='True' or sys.argv[4]==True:
+        ylim = int(sys.argv[3])
+        clip_y = True
+
     df = pd.read_csv(sys.argv[1], names=['s', 'size_u', 'size_v', 'cos_org', 'cos_fmh'], delimiter=' ')
     fig, axs = plt.subplots(2, 2, sharex=True)
     a, b = min(df['size_v'].tolist()), max(df['size_v'].tolist())
@@ -33,5 +39,5 @@ if __name__ == "__main__":
     fig.suptitle('Estimated vals for various scale factors', fontsize=11)
     plt.subplots_adjust(hspace=0.4, wspace=0.4)
 
-    #plt.savefig('diff_of_metrics.pdf')
+    plt.savefig(sys.argv[2])
     plt.show()
